@@ -1,0 +1,15 @@
+
+*.pkl
+*.bag
+/out/
+__pycache__/
+*.pyc
+.DS_Store
+.idea/
+
+*.pkl
+*.bag
+/out/
+__pycache__/
+.DS_Store
+.idea/

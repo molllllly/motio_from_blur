@@ -1,0 +1,1806 @@
+$ python inference_bit.py -c saved_SMEAR/RBI/08-02_20-16/config.json -m saved_SMEAR/RBI/08-02_20-16/checkpoint-epoch200.pth -t /cephyr/users/leim/Alvis/dataset/RBI/test_RBI.txt -mo single -e png
+/cephyr/users/leim/Alvis/smear_blur/my_venv/lib/python3.11/site-packages/timm/models/layers/__init__.py:49: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+usage: inference_bit.py [-h] -c CONFIG -ckp CHECKPOINT -t TEST [-o OUTPUT] [-e EXTENSION]
+inference_bit.py: error: the following arguments are required: -ckp/--checkpoint
+(my_venv) [leim@alvis10-05 smear_blur]$ python inference_bit.py -c saved_SMEAR/RBI/08-02_20-16/config.json -ckp saved_SMEAR/RBI/08-02_20-16/checkpoint-epoch200.pth -t /cephyr/users/leim/Alvis/dataset/RBI/test_RBI.txt -e png
+/cephyr/users/leim/Alvis/smear_blur/my_venv/lib/python3.11/site-packages/timm/models/layers/__init__.py:49: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+Inference device: cuda:0
+/apps/Arch/software/PyTorch/2.1.2-foss-2023a-CUDA-12.1.1/lib/python3.11/site-packages/torch/functional.py:504: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at /dev/shm/PyTorch/2.1.2/foss-2023a-CUDA-12.1.1/pytorch-v2.1.2/aten/src/ATen/native/TensorShape.cpp:3526.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+Checkpoint parameters: 382
+First checkpoint keys: ['conv_down.0.weight', 'conv_down.0.bias', 'conv_down.2.weight', 'conv_down.2.bias', 'linear_reduce.weight']
+Missing model keys: []
+Unexpected checkpoint keys: []
+Number of inference images: 61
+Input directory: /cephyr/users/leim/Alvis/dataset/RBI/images/
+Output directory: outputs/RBI/
+  0%|                                                                                            | 0/61 [00:00<?, ?it/s]
+First input image: /cephyr/users/leim/Alvis/dataset/RBI/images/000035.png
+Input tensor shape: (1, 3, 480, 640)
+Input tensor min: -0.4747749865055084
+Input tensor max: 0.5371001362800598
+Input tensor mean: -0.26665687561035156
+Saved 000095: 100%|█████████████████████████████████████████████████████████████████████| 61/61 [00:18<00:00,  3.30it/s]
+
+Inference finished.
+Saved 61 prediction files under: outputs/RBI/
+(my_venv) [leim@alvis10-05 smear_blur]$ python rolling_shutter_smear_pose.py   --smear outputs/RBI/000063.mat   --input-type mat   --metadata /cephyr/users/leim/Alvis/dataset/RBI/poses/000063.npz   --output pose_results/000063_rs_mat.npz   --quat-order xyzw   --poses-are body   --tcb-convention c_from_b   --depth-scale 1.0   --min-depth 0.3   --max-depth 15.0   --min-smear 2.0   --max-smear 50.0   --max-points 6000   --initialization pnp   --sign-selection gt_rotation   --loss soft_l1   --f-scale 1.0   --max-nfev 120
+Smear: outputs/RBI/000063.mat
+Input type: mat
+Metadata: /cephyr/users/leim/Alvis/dataset/RBI/poses/000063.npz
+Image/depth shape: (480, 640)
+Valid optimization points: 6000
+Readout: 0.03 s
+Exposure: 0.0166 s
+Half exposure in normalized readout time: 0.27666666666666667
+Rows with clipped start: 37.95 %
+Rows with clipped end: 6.366666666666666 %
+
+========================================
+Optimizing sign +1
+========================================
+Initial twist [v,w] per second: [-0.30894046 -3.61880167  1.29497123 -0.34397201  1.39054092 -0.23689518]
+Both `ftol` and `xtol` termination conditions are satisfied.
+Function evaluations 14, initial cost 8.5894e+03, final cost 3.4013e+03, first-order optimality 5.31e-02.
+Optimization success: True
+Status: 4
+Message: Both `ftol` and `xtol` termination conditions are satisfied.
+Function evaluations: 14
+Estimated twist [v,w] per second: [ 0.16714946 -0.01205208  0.10311311  0.04247274  1.42783546  0.04904978]
+Cost: 3401.310377772048
+Optimality: 0.053130526137198326
+Smear metrics: {'mean_epe': 1.1023400026450232, 'median_epe': 1.0634816861798941, 'p90_epe': 1.8090152445702432, 'fraction_below_1px': 0.4495, 'fraction_below_3px': 0.9931666666666666}
+
+Estimated middle-row full-exposure transform:
+[[ 0.99971879 -0.00080579  0.02370013  0.00279479]
+ [ 0.00082251  0.99999942 -0.00069533 -0.00019953]
+ [-0.02369956  0.00071463  0.99971887  0.00167857]
+ [ 0.          0.          0.          1.        ]]
+
+Direct mocap comparison:
+  rotation_error_deg: 0.37577571740030036
+  translation_error: 0.012212215979159351
+  translation_direction_error_deg: 52.080497294432455
+  estimated_translation_norm: 0.003266224275456137
+  gt_translation_norm: 0.013944570456828774
+  translation_scale_ratio: 0.2342291062724445
+Inverse mocap comparison:
+  rotation_error_deg: 2.913055162261782
+  translation_error: 0.016210626695255043
+  translation_direction_error_deg: 129.2748897483778
+  estimated_translation_norm: 0.003266224275456137
+  gt_translation_norm: 0.013944570456828774
+  translation_scale_ratio: 0.2342291062724445
+
+========================================
+Optimizing sign -1
+========================================
+Initial twist [v,w] per second: [ 0.60246979  3.57686851 -1.22123966  0.3382561  -1.41820892  0.23625644]
+`ftol` termination condition is satisfied.
+Function evaluations 14, initial cost 8.6229e+03, final cost 3.3931e+03, first-order optimality 1.83e-02.
+Optimization success: True
+Status: 2
+Message: `ftol` termination condition is satisfied.
+Function evaluations: 14
+Estimated twist [v,w] per second: [-0.15868323  0.02441137 -0.06044    -0.04157454 -1.42886987 -0.04863866]
+Cost: 3393.140958706016
+Optimality: 0.018255255719184946
+Smear metrics: {'mean_epe': 1.1009451264760615, 'median_epe': 1.0603058630714584, 'p90_epe': 1.8118520272582437, 'fraction_below_1px': 0.45216666666666666, 'fraction_below_3px': 0.9936666666666667}
+
+Estimated middle-row full-exposure transform:
+[[ 0.99971839  0.00081551 -0.02371673 -0.00262183]
+ [-0.00079914  0.99999944  0.00069965  0.00040594]
+ [ 0.02371729 -0.0006805   0.99971847 -0.00103459]
+ [ 0.          0.          0.          1.        ]]
+
+Direct mocap comparison:
+  rotation_error_deg: 2.9141030093478135
+  translation_error: 0.015494187370596955
+  translation_direction_error_deg: 118.18384508049726
+  estimated_translation_norm: 0.0028476576331775993
+  gt_translation_norm: 0.013944570456828774
+  translation_scale_ratio: 0.20421264620475113
+Inverse mocap comparison:
+  rotation_error_deg: 0.37448426496954734
+  translation_error: 0.012911404794463656
+  translation_direction_error_deg: 63.16143467698445
+  estimated_translation_norm: 0.0028476576331775997
+  gt_translation_norm: 0.013944570456828774
+  translation_scale_ratio: 0.20421264620475116
+
+WARNING: --sign-selection gt_rotation uses mocap ground truth and is only valid for diagnosis/evaluation.
+
+========================================
+Selected result
+========================================
+Selection rule: gt_rotation
+Selected sign: -1.0
+Selected inverse: True
+Selected twist [v,w] per second: [-0.15868323  0.02441137 -0.06044    -0.04157454 -1.42886987 -0.04863866]
+Selected smear metrics: {'mean_epe': 1.1009451264760615, 'median_epe': 1.0603058630714584, 'p90_epe': 1.8118520272582437, 'fraction_below_1px': 0.45216666666666666, 'fraction_below_3px': 0.9936666666666667}
+GT middle-exposure taus: 0.22333333333333333 0.7766666666666666
+
+Selected estimated transform:
+[[ 0.99971839 -0.00079914  0.02371729  0.00264596]
+ [ 0.00081551  0.99999944 -0.0006805  -0.0004045 ]
+ [-0.02371673  0.00069965  0.99971847  0.00097183]
+ [ 0.          0.          0.          1.        ]]
+
+Mocap middle-exposure transform:
+[[ 0.99963202  0.00245946  0.02701442  0.00171356]
+ [-0.00256416  0.99998933  0.00384196  0.00013476]
+ [-0.02700468 -0.00390981  0.99962766  0.01383823]
+ [ 0.          0.          0.          1.        ]]
+
+Selected mocap errors:
+  rotation_error_deg: 0.37448426496954734
+  translation_error: 0.012911404794463656
+  translation_direction_error_deg: 63.16143467698445
+  estimated_translation_norm: 0.0028476576331775997
+  gt_translation_norm: 0.013944570456828774
+  translation_scale_ratio: 0.20421264620475116
+
+Saved:
+pose_results/000063_rs_mat.npz
+pose_results/000063_rs_mat.json
+(my_venv) [leim@alvis10-05 smear_blur]$ python rolling_shutter_smear_pose.py   --smear outputs/RBI/000063.mat   --input-type mat   --metadata /cephyr/users/leim/Alvis/dataset/RBI/poses/000063.npz   --output pose_results/000063_rs_mat.npz   --quat-order xyzw   --poses-are body   --tcb-convention c_from_b   --depth-scale 1.0   --min-depth 0.3   --max-depth 15.0   --min-smear 2.0   --max-smear 50.0   --max-points 6000   --initialization pnp   --sign-selection gt_rotation   --loss soft_l1   --f-scale 1.0   --max-nfev 120
+Smear: outputs/RBI/000063.mat
+Input type: mat
+Metadata: /cephyr/users/leim/Alvis/dataset/RBI/poses/000063.npz
+Image/depth shape: (480, 640)
+Valid optimization points: 6000
+Readout: 0.03 s
+Exposure: 0.0166 s
+Half exposure in normalized readout time: 0.27666666666666667
+Rows with clipped start: 37.95 %
+Rows with clipped end: 6.366666666666666 %
+
+========================================
+Optimizing sign +1
+========================================
+Initial twist [v,w] per second: [-0.30894046 -3.61880167  1.29497123 -0.34397201  1.39054092 -0.23689518]
+Both `ftol` and `xtol` termination conditions are satisfied.
+Function evaluations 14, initial cost 8.5894e+03, final cost 3.4013e+03, first-order optimality 5.31e-02.
+Optimization success: True
+Status: 4
+Message: Both `ftol` and `xtol` termination conditions are satisfied.
+Function evaluations: 14
+Estimated twist [v,w] per second: [ 0.16714946 -0.01205208  0.10311311  0.04247274  1.42783546  0.04904978]
+Cost: 3401.310377772048
+Optimality: 0.053130526137198326
+Smear metrics: {'mean_epe': 1.1023400026450232, 'median_epe': 1.0634816861798941, 'p90_epe': 1.8090152445702432, 'fraction_below_1px': 0.4495, 'fraction_below_3px': 0.9931666666666666}
+
+Estimated middle-row full-exposure transform:
+[[ 0.99971879 -0.00080579  0.02370013  0.00279479]
+ [ 0.00082251  0.99999942 -0.00069533 -0.00019953]
+ [-0.02369956  0.00071463  0.99971887  0.00167857]
+ [ 0.          0.          0.          1.        ]]
+
+Direct mocap comparison:
+  rotation_error_deg: 0.37577571740030036
+  translation_error: 0.012212215979159351
+  translation_direction_error_deg: 52.080497294432455
+  estimated_translation_norm: 0.003266224275456137
+  gt_translation_norm: 0.013944570456828774
+  translation_scale_ratio: 0.2342291062724445
+Inverse mocap comparison:
+  rotation_error_deg: 2.913055162261782
+  translation_error: 0.016210626695255043
+  translation_direction_error_deg: 129.2748897483778
+  estimated_translation_norm: 0.003266224275456137
+  gt_translation_norm: 0.013944570456828774
+  translation_scale_ratio: 0.2342291062724445
+
+========================================
+Optimizing sign -1
+========================================
+Initial twist [v,w] per second: [ 0.60246979  3.57686851 -1.22123966  0.3382561  -1.41820892  0.23625644]
+`ftol` termination condition is satisfied.
+Function evaluations 14, initial cost 8.6229e+03, final cost 3.3931e+03, first-order optimality 1.83e-02.
+Optimization success: True
+Status: 2
+Message: `ftol` termination condition is satisfied.
+Function evaluations: 14
+Estimated twist [v,w] per second: [-0.15868323  0.02441137 -0.06044    -0.04157454 -1.42886987 -0.04863866]
+Cost: 3393.140958706016
+Optimality: 0.018255255719184946
+Smear metrics: {'mean_epe': 1.1009451264760615, 'median_epe': 1.0603058630714584, 'p90_epe': 1.8118520272582437, 'fraction_below_1px': 0.45216666666666666, 'fraction_below_3px': 0.9936666666666667}
+
+Estimated middle-row full-exposure transform:
+[[ 0.99971839  0.00081551 -0.02371673 -0.00262183]
+ [-0.00079914  0.99999944  0.00069965  0.00040594]
+ [ 0.02371729 -0.0006805   0.99971847 -0.00103459]
+ [ 0.          0.          0.          1.        ]]
+
+Direct mocap comparison:
+  rotation_error_deg: 2.9141030093478135
+  translation_error: 0.015494187370596955
+  translation_direction_error_deg: 118.18384508049726
+  estimated_translation_norm: 0.0028476576331775993
+  gt_translation_norm: 0.013944570456828774
+  translation_scale_ratio: 0.20421264620475113
+Inverse mocap comparison:
+  rotation_error_deg: 0.37448426496954734
+  translation_error: 0.012911404794463656
+  translation_direction_error_deg: 63.16143467698445
+  estimated_translation_norm: 0.0028476576331775997
+  gt_translation_norm: 0.013944570456828774
+  translation_scale_ratio: 0.20421264620475116
+
+WARNING: --sign-selection gt_rotation uses mocap ground truth and is only valid for diagnosis/evaluation.
+
+========================================
+Selected result
+========================================
+Selection rule: gt_rotation
+Selected sign: -1.0
+Selected inverse: True
+Selected twist [v,w] per second: [-0.15868323  0.02441137 -0.06044    -0.04157454 -1.42886987 -0.04863866]
+Selected smear metrics: {'mean_epe': 1.1009451264760615, 'median_epe': 1.0603058630714584, 'p90_epe': 1.8118520272582437, 'fraction_below_1px': 0.45216666666666666, 'fraction_below_3px': 0.9936666666666667}
+GT middle-exposure taus: 0.22333333333333333 0.7766666666666666
+
+Selected estimated transform:
+[[ 0.99971839 -0.00079914  0.02371729  0.00264596]
+ [ 0.00081551  0.99999944 -0.0006805  -0.0004045 ]
+ [-0.02371673  0.00069965  0.99971847  0.00097183]
+ [ 0.          0.          0.          1.        ]]
+
+Mocap middle-exposure transform:
+[[ 0.99963202  0.00245946  0.02701442  0.00171356]
+ [-0.00256416  0.99998933  0.00384196  0.00013476]
+ [-0.02700468 -0.00390981  0.99962766  0.01383823]
+ [ 0.          0.          0.          1.        ]]
+
+Selected mocap errors:
+  rotation_error_deg: 0.37448426496954734
+  translation_error: 0.012911404794463656
+  translation_direction_error_deg: 63.16143467698445
+  estimated_translation_norm: 0.0028476576331775997
+  gt_translation_norm: 0.013944570456828774
+  translation_scale_ratio: 0.20421264620475116
+
+Saved:
+pose_results/000063_rs_mat.npz
+pose_results/000063_rs_mat.json
+(my_venv) [leim@alvis10-05 smear_blur]$ python -c "
+> import glob, json, numpy as np
+> errs = []
+> for j in sorted(glob.glob('pose_results/*.json')):
+>     d = json.load(open(j))
+>     errs.append(d['mocap_errors']['rotation_error_deg'])
+> errs = np.array(errs)
+> print(f'frames      : {len(errs)}')
+> print(f'mean rot err: {errs.mean():.3f} deg')
+> print(f'median      : {np.median(errs):.3f} deg')
+> print(f'p90         : {np.percentile(errs,90):.3f} deg')
+> print(f'max         : {errs.max():.3f} deg')
+> "
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+KeyError: 'mocap_errors'
+(my_venv) [leim@alvis10-05 smear_blur]$ python compare.py
+mean EPE: 2.466545 px
+median  : 2.0866785 px
+(my_venv) [leim@alvis10-05 smear_blur]$ python compare.py
+mean EPE: 1.5072023 px
+median  : 1.2426424 px
+(my_venv) [leim@alvis10-05 smear_blur]$ python rolling_shutter_smear_pose.py   --smear outputs/RBI/000062.mat   --input-type mat   --metadata /cephyr/users/leim/Alvis/dataset/RBI/poses/000062.npz   --output pose_results/000063_rs_mat.npz   --quat-order xyzw   --poses-are body   --tcb-convention c_from_b   --depth-scale 1.0   --min-depth 0.3   --max-depth 15.0   --min-smear 2.0   --max-smear 50.0   --max-points 6000   --initialization pnp   --sign-selection gt_rotation   --loss soft_l1   --f-scale 1.0   --max-nfev 120
+Smear: outputs/RBI/000062.mat
+Input type: mat
+Metadata: /cephyr/users/leim/Alvis/dataset/RBI/poses/000062.npz
+Image/depth shape: (480, 640)
+Valid optimization points: 6000
+Readout: 0.03 s
+Exposure: 0.0166 s
+Half exposure in normalized readout time: 0.27666666666666667
+Rows with clipped start: 36.9 %
+Rows with clipped end: 9.700000000000001 %
+
+========================================
+Optimizing sign +1
+========================================
+Initial twist [v,w] per second: [-1.35189837 -1.82291406 -0.40741302 -0.14620367  1.48447368 -0.22465796]
+`ftol` termination condition is satisfied.
+Function evaluations 9, initial cost 7.2980e+03, final cost 3.9091e+03, first-order optimality 2.81e-02.
+Optimization success: True
+Status: 2
+Message: `ftol` termination condition is satisfied.
+Function evaluations: 9
+Estimated twist [v,w] per second: [ 0.10891895 -0.03638863  0.08157263  0.0345841   1.44782473  0.00297744]
+Cost: 3909.097651065223
+Optimality: 0.028130347866420345
+Smear metrics: {'mean_epe': 1.176225790521793, 'median_epe': 1.0713700732262834, 'p90_epe': 2.0024042939465185, 'fraction_below_1px': 0.4545, 'fraction_below_3px': 0.9828333333333333}
+
+Estimated middle-row full-exposure transform:
+[[ 0.9997112  -0.00004252  0.02403159  0.00182417]
+ [ 0.00005632  0.99999983 -0.00057345 -0.00060439]
+ [-0.02403156  0.00057463  0.99971104  0.00133208]
+ [ 0.          0.          0.          1.        ]]
+
+Direct mocap comparison:
+  rotation_error_deg: 0.20166797388283594
+  translation_error: 0.012500577869093388
+  translation_direction_error_deg: 50.25136267716403
+  estimated_translation_norm: 0.0023382243099383604
+  gt_translation_norm: 0.01386573981693346
+  translation_scale_ratio: 0.1686332168935419
+Inverse mocap comparison:
+  rotation_error_deg: 2.8757747504274795
+  translation_error: 0.015501518663496678
+  translation_direction_error_deg: 131.035827260878
+  estimated_translation_norm: 0.0023382243099383604
+  gt_translation_norm: 0.01386573981693346
+  translation_scale_ratio: 0.1686332168935419
+
+========================================
+Optimizing sign -1
+========================================
+Initial twist [v,w] per second: [ 1.42514208  1.85104912  0.71791179  0.14630937 -1.49327374  0.22946211]
+`ftol` termination condition is satisfied.
+Function evaluations 9, initial cost 7.4492e+03, final cost 3.9053e+03, first-order optimality 3.23e-02.
+Optimization success: True
+Status: 2
+Message: `ftol` termination condition is satisfied.
+Function evaluations: 9
+Estimated twist [v,w] per second: [-0.09509056  0.04668223 -0.03323005 -0.03407061 -1.44940817 -0.00244768]
+Cost: 3905.2636753907746
+Optimality: 0.03225077088817064
+Smear metrics: {'mean_epe': 1.1754214058645596, 'median_epe': 1.0683836495493848, 'p90_epe': 2.011040514924093, 'fraction_below_1px': 0.4575, 'fraction_below_3px': 0.985}
+
+Estimated middle-row full-exposure transform:
+[[ 0.99971057  0.00004743 -0.02405784 -0.0015717 ]
+ [-0.00003382  0.99999984  0.00056601  0.0007748 ]
+ [ 0.02405786 -0.00056503  0.99971041 -0.00057077]
+ [ 0.          0.          0.          1.        ]]
+
+Direct mocap comparison:
+  rotation_error_deg: 2.8773050296948774
+  translation_error: 0.014669401503173899
+  translation_direction_error_deg: 112.4740194565914
+  estimated_translation_norm: 0.0018429126186896609
+  gt_translation_norm: 0.01386573981693346
+  translation_scale_ratio: 0.13291123611298503
+Inverse mocap comparison:
+  rotation_error_deg: 0.20024279083078844
+  translation_error: 0.013309292997129433
+  translation_direction_error_deg: 68.75628173219249
+  estimated_translation_norm: 0.0018429126186896609
+  gt_translation_norm: 0.01386573981693346
+  translation_scale_ratio: 0.13291123611298503
+
+WARNING: --sign-selection gt_rotation uses mocap ground truth and is only valid for diagnosis/evaluation.
+
+========================================
+Selected result
+========================================
+Selection rule: gt_rotation
+Selected sign: -1.0
+Selected inverse: True
+Selected twist [v,w] per second: [-0.09509056  0.04668223 -0.03323005 -0.03407061 -1.44940817 -0.00244768]
+Selected smear metrics: {'mean_epe': 1.1754214058645596, 'median_epe': 1.0683836495493848, 'p90_epe': 2.011040514924093, 'fraction_below_1px': 0.4575, 'fraction_below_3px': 0.985}
+GT middle-exposure taus: 0.22333333333333333 0.7766666666666666
+
+Selected estimated transform:
+[[ 0.99971057 -0.00003382  0.02405786  0.001585  ]
+ [ 0.00004743  0.99999984 -0.00056503 -0.00077505]
+ [-0.02405784  0.00056601  0.99971041  0.00053236]
+ [ 0.          0.          0.          1.        ]]
+
+Mocap middle-exposure transform:
+[[ 0.99965636  0.00247725  0.0260963   0.00150047]
+ [-0.00249623  0.99999664  0.0006947   0.0005819 ]
+ [-0.02609449 -0.0007596   0.99965919  0.01377203]
+ [ 0.          0.          0.          1.        ]]
+
+Selected mocap errors:
+  rotation_error_deg: 0.20024279083078844
+  translation_error: 0.013309292997129433
+  translation_direction_error_deg: 68.75628173219249
+  estimated_translation_norm: 0.0018429126186896609
+  gt_translation_norm: 0.01386573981693346
+  translation_scale_ratio: 0.13291123611298503
+
+Saved:
+pose_results/000063_rs_mat.npz
+pose_results/000063_rs_mat.json
+(my_venv) [leim@alvis10-05 smear_blur]$ python -c "
+import glob, json, numpy as np
+errs = []
+for j in sorted(glob.glob('pose_results/*.json')):
+    d = json.load(open(j))
+    errs.append(d['mocap_errors']['rotation_error_deg'])
+errs = np.array(errs)
+print(f'frames      : {len(errs)}')
+print(f'mean rot err: {errs.mean():.3f} deg')
+print(f'median      : {np.median(errs):.3f} deg')
+print(f'p90         : {np.percentile(errs,90):.3f} deg')
+print(f'max         : {errs.max():.3f} deg')
+"
+
+Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+KeyError: 'mocap_errors'
+(my_venv) [leim@alvis10-05 smear_blur]$
+(my_venv) [leim@alvis10-05 smear_blur]$ python rolling_shutter_smear_pose.py   --smear /cephyr/users/leim/Alvis/dataset/RBI/double_ang_reps/000063.pfm   --input-type pfm   --metadata /cephyr/users/leim/Alvis/dataset/RBI/poses/000063.npz   --output pose_results/000063_rs_gt.npz   --quat-order xyzw   --poses-are body   --tcb-convention c_from_b   --depth-scale 1.0   --min-depth 0.3   --max-depth 15.0   --min-smear 2.0   --max-smear 50.0   --max-points 6000   --initialization pnp   --sign-selection gt_rotation   --loss soft_l1   --f-scale 1.0   --max-nfev 120
+Smear: /cephyr/users/leim/Alvis/dataset/RBI/double_ang_reps/000063.pfm
+Input type: pfm
+Metadata: /cephyr/users/leim/Alvis/dataset/RBI/poses/000063.npz
+Image/depth shape: (480, 640)
+Valid optimization points: 6000
+Readout: 0.03 s
+Exposure: 0.0166 s
+Half exposure in normalized readout time: 0.27666666666666667
+Rows with clipped start: 37.95 %
+Rows with clipped end: 6.366666666666666 %
+
+========================================
+Optimizing sign +1
+========================================
+Initial twist [v,w] per second: [-1.39681671 -2.94579524  1.57187232 -0.42557733  1.64759883 -0.450564  ]
+Both `ftol` and `xtol` termination conditions are satisfied.
+Function evaluations 19, initial cost 7.5565e+03, final cost 1.1903e+00, first-order optimality 5.76e-04.
+Optimization success: True
+Status: 4
+Message: Both `ftol` and `xtol` termination conditions are satisfied.
+Function evaluations: 19
+Estimated twist [v,w] per second: [ 0.07477552  0.05015011  0.84148226 -0.11807204  1.61532845 -0.16023116]
+Cost: 1.1902732108053646
+Optimality: 0.0005758881721210014
+Smear metrics: {'mean_epe': 0.015520970612608343, 'median_epe': 0.011785559298043738, 'p90_epe': 0.034903295871376805, 'fraction_below_1px': 1.0, 'fraction_below_3px': 1.0}
+
+Estimated middle-row full-exposure transform:
+[[ 0.99963698  0.00263324  0.0268138   0.0014295 ]
+ [-0.00268579  0.99999454  0.0019241   0.00084435]
+ [-0.02680858 -0.00199542  0.99963859  0.01394946]
+ [ 0.          0.          0.          1.        ]]
+
+Direct mocap comparison:
+  rotation_error_deg: 0.11070806951278997
+  translation_error: 0.0007723821689769023
+  translation_direction_error_deg: 3.1338509276592825
+  estimated_translation_norm: 0.014047909564640491
+  gt_translation_norm: 0.013944570456828774
+  translation_scale_ratio: 1.0074107057031012
+Inverse mocap comparison:
+  rotation_error_deg: 3.116279268891491
+  translation_error: 0.027976090904298718
+  translation_direction_error_deg: 176.07853024598782
+  estimated_translation_norm: 0.01404790956464049
+  gt_translation_norm: 0.013944570456828774
+  translation_scale_ratio: 1.007410705703101
+
+========================================
+Optimizing sign -1
+========================================
+Initial twist [v,w] per second: [ 1.50657917  3.00649747 -1.26423492  0.42675737 -1.65777761  0.45523408]
+`ftol` termination condition is satisfied.
+Function evaluations 20, initial cost 7.6346e+03, final cost 5.5606e+00, first-order optimality 2.49e-03.
+Optimization success: True
+Status: 2
+Message: `ftol` termination condition is satisfied.
+Function evaluations: 20
+Estimated twist [v,w] per second: [-0.07445103 -0.04107046 -0.81237558  0.11794986 -1.61518059  0.16044809]
+Cost: 5.560573059474265
+Optimality: 0.0024926122681967165
+Smear metrics: {'mean_epe': 0.030568990441968813, 'median_epe': 0.018741749515429364, 'p90_epe': 0.07173045989391312, 'fraction_below_1px': 1.0, 'fraction_below_3px': 1.0}
+
+Estimated middle-row full-exposure transform:
+[[ 0.99963703 -0.00268936 -0.02680613 -0.00105406]
+ [ 0.00263687  0.99999454 -0.00199343 -0.00067004]
+ [ 0.02681134  0.00192203  0.99963866 -0.01350104]
+ [ 0.          0.          0.          1.        ]]
+
+Direct mocap comparison:
+  rotation_error_deg: 3.1161472481281387
+  translation_error: 0.02749077985018126
+  translation_direction_error_deg: 176.54760311504177
+  estimated_translation_norm: 0.013558688168595765
+  gt_translation_norm: 0.013944570456828774
+  translation_scale_ratio: 0.9723274166509704
+Inverse mocap comparison:
+  rotation_error_deg: 0.11085377946110204
+  translation_error: 0.0007332298643304687
+  translation_direction_error_deg: 2.598168892214485
+  estimated_translation_norm: 0.013558688168595765
+  gt_translation_norm: 0.013944570456828774
+  translation_scale_ratio: 0.9723274166509704
+
+WARNING: --sign-selection gt_rotation uses mocap ground truth and is only valid for diagnosis/evaluation.
+
+========================================
+Selected result
+========================================
+Selection rule: gt_rotation
+Selected sign: 1.0
+Selected inverse: False
+Selected twist [v,w] per second: [ 0.07477552  0.05015011  0.84148226 -0.11807204  1.61532845 -0.16023116]
+Selected smear metrics: {'mean_epe': 0.015520970612608343, 'median_epe': 0.011785559298043738, 'p90_epe': 0.034903295871376805, 'fraction_below_1px': 1.0, 'fraction_below_3px': 1.0}
+GT middle-exposure taus: 0.22333333333333333 0.7766666666666666
+
+Selected estimated transform:
+[[ 0.99963698  0.00263324  0.0268138   0.0014295 ]
+ [-0.00268579  0.99999454  0.0019241   0.00084435]
+ [-0.02680858 -0.00199542  0.99963859  0.01394946]
+ [ 0.          0.          0.          1.        ]]
+
+Mocap middle-exposure transform:
+[[ 0.99963202  0.00245946  0.02701442  0.00171356]
+ [-0.00256416  0.99998933  0.00384196  0.00013476]
+ [-0.02700468 -0.00390981  0.99962766  0.01383823]
+ [ 0.          0.          0.          1.        ]]
+
+Selected mocap errors:
+  rotation_error_deg: 0.11070806951278997
+  translation_error: 0.0007723821689769023
+  translation_direction_error_deg: 3.1338509276592825
+  estimated_translation_norm: 0.014047909564640491
+  gt_translation_norm: 0.013944570456828774
+  translation_scale_ratio: 1.0074107057031012
+
+Saved:
+pose_results/000063_rs_gt.npz
+pose_results/000063_rs_gt.json
+(my_venv) [leim@alvis10-05 smear_blur]$
+
+
+
+
+
+import scipy.io, numpy as np
+from util_smear.pfm import readPFM
+from util_smear.preprocess import _convert_Dounble_to_Local
+
+pred = scipy.io.loadmat('outputs/RBI/000062.mat')['uvm']          # (H,W,3)
+gt, _ = readPFM('/cephyr/users/leim/Alvis/dataset/RBI/double_ang_reps/000062.pfm')
+
+pred_local = _convert_Dounble_to_Local(pred)
+gt_local   = _convert_Dounble_to_Local(gt)
+
+m = gt_local[...,2] == 1                                          # GT 有效像素
+du = pred_local[...,0][m] - gt_local[...,0][m]
+dv = pred_local[...,1][m] - gt_local[...,1][m]
+epe = np.sqrt(du**2 + dv**2)
+
+# double-angle 有 180° 歧义，取 ± 最小
+du2 = pred_local[...,0][m] + gt_local[...,0][m]
+dv2 = pred_local[...,1][m] + gt_local[...,1][m]
+epe2 = np.sqrt(du2**2 + dv2**2)
+epe = np.minimum(epe, epe2)
+
+print('mean EPE:', epe.mean(), 'px')
+print('median  :', np.median(epe), 'px')
+
+
+#!/usr/bin/env python3
+"""
+rolling_shutter_smear_pose.py
+
+Estimate a constant camera twist from a rolling-shutter smear field.
+
+This script is designed for the files produced by slow_to_fast_raw_direct.py:
+
+MAT prediction:
+    uvm[..., 0] = u'     double-angle horizontal component
+    uvm[..., 1] = v'     double-angle vertical component
+    uvm[..., 2] = raw uncertainty output s
+
+PFM ground truth:
+    pfm[..., 0] = u'     double-angle horizontal component
+    pfm[..., 1] = v'     double-angle vertical component
+    pfm[..., 2] = mask   binary validity mask
+
+NPZ metadata:
+    depth, K_color, readout, exposure,
+    p_ref, q_ref, p_0, q_0, p_1, q_1,
+    taus, dense_p, dense_q, T_cb
+
+Model
+-----
+For a valid pixel i at row time tau_i:
+
+    tau_a_i = clip(tau_i - exposure/(2*readout), 0, 1)
+    tau_b_i = clip(tau_i + exposure/(2*readout), 0, 1)
+
+The stored depth is treated as a 3D point in the camera frame at tau_i.
+A single constant twist xi = [v_x,v_y,v_z,w_x,w_y,w_z] is optimized so that:
+
+    predicted smear_i
+        = project(T(tau_b_i <- tau_i) X_i)
+        - project(T(tau_a_i <- tau_i) X_i)
+
+matches either +(u_i,v_i) or -(u_i,v_i).
+
+Important
+---------
+This is still a simplified model:
+- it assumes one constant camera twist over the frame;
+- it matches the clipping used by the PFM generator;
+- it estimates one global sign because double-angle encoding removes direction;
+- the NPZ dense mocap trajectory may come from a different pose source than the
+  TF trajectory used to generate the PFM.
+
+The estimated twist is expressed as a camera-coordinate source-to-target
+transformation rate:
+
+    X_target = Exp(dt * xi^) X_source
+"""
+
+import argparse
+import json
+import math
+import os
+from typing import Dict, Optional, Tuple
+
+import cv2
+import numpy as np
+import scipy.io
+import torch
+from scipy.optimize import least_squares
+from scipy.spatial.transform import Rotation, Slerp
+
+from util_smear.pfm import readPFM
+
+
+# ---------------------------------------------------------------------
+# Input loading
+# ---------------------------------------------------------------------
+
+def load_smear(path: str, input_type: str) -> Tuple[np.ndarray, str]:
+    if input_type == "auto":
+        extension = os.path.splitext(path)[1].lower()
+        if extension == ".mat":
+            input_type = "mat"
+        elif extension == ".pfm":
+            input_type = "pfm"
+        else:
+            raise ValueError(
+                f"Cannot infer input type from extension: {path}. "
+                "Use --input-type mat or --input-type pfm."
+            )
+
+    if input_type == "mat":
+        data = scipy.io.loadmat(path)
+        if "uvm" not in data:
+            raise KeyError(f"MAT file does not contain key 'uvm': {path}")
+        smear = np.asarray(data["uvm"], dtype=np.float32)
+
+    elif input_type == "pfm":
+        smear, _ = readPFM(path)
+        smear = np.asarray(smear, dtype=np.float32)
+
+    else:
+        raise ValueError(f"Unsupported input type: {input_type}")
+
+    if smear.ndim != 3 or smear.shape[-1] != 3:
+        raise ValueError(
+            f"Expected smear shape (H, W, 3), got {smear.shape}"
+        )
+
+    if not np.isfinite(smear[..., :2]).all():
+        raise ValueError("Smear u'/v' channels contain NaN or Inf")
+
+    return smear, input_type
+
+
+def double_angle_to_local(
+    smear: np.ndarray,
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """
+    Convert double-angle [u',v'] to one local orientation [u,v].
+
+    The opposite direction [-u,-v] is equally valid. The script therefore
+    optimizes both global signs.
+    """
+    u_prime = smear[..., 0]
+    v_prime = smear[..., 1]
+    third = smear[..., 2]
+
+    magnitude = np.sqrt(u_prime * u_prime + v_prime * v_prime)
+    alpha = 0.5 * np.arctan2(v_prime, u_prime)
+
+    u = magnitude * np.cos(alpha)
+    v = magnitude * np.sin(alpha)
+
+    return (
+        u.astype(np.float64),
+        v.astype(np.float64),
+        third.astype(np.float64),
+    )
+
+
+def raw_s_to_sigma(raw_s: np.ndarray) -> np.ndarray:
+    tensor = torch.from_numpy(raw_s.astype(np.float32))
+    variance = torch.nn.functional.softplus(tensor) + 1e-6
+    return torch.sqrt(variance).cpu().numpy().astype(np.float64)
+
+
+# ---------------------------------------------------------------------
+# Lie-group helpers
+# ---------------------------------------------------------------------
+
+def skew(vector: np.ndarray) -> np.ndarray:
+    x, y, z = np.asarray(vector, dtype=np.float64).reshape(3)
+    return np.array(
+        [
+            [0.0, -z, y],
+            [z, 0.0, -x],
+            [-y, x, 0.0],
+        ],
+        dtype=np.float64,
+    )
+
+
+def se3_exp(xi_dt: np.ndarray) -> np.ndarray:
+    """
+    SE(3) exponential for one 6-vector [rho, phi].
+
+    The returned matrix maps source-camera coordinates to target-camera
+    coordinates.
+    """
+    xi_dt = np.asarray(xi_dt, dtype=np.float64).reshape(6)
+    rho = xi_dt[:3]
+    phi = xi_dt[3:]
+
+    theta = np.linalg.norm(phi)
+    Phi = skew(phi)
+    Phi2 = Phi @ Phi
+
+    if theta < 1e-10:
+        R = np.eye(3) + Phi + 0.5 * Phi2
+        V = np.eye(3) + 0.5 * Phi + (1.0 / 6.0) * Phi2
+    else:
+        theta2 = theta * theta
+        theta3 = theta2 * theta
+
+        A = math.sin(theta) / theta
+        B = (1.0 - math.cos(theta)) / theta2
+        C = (theta - math.sin(theta)) / theta3
+
+        R = np.eye(3) + A * Phi + B * Phi2
+        V = np.eye(3) + B * Phi + C * Phi2
+
+    transform = np.eye(4, dtype=np.float64)
+    transform[:3, :3] = R
+    transform[:3, 3] = V @ rho
+    return transform
+
+
+def se3_log(transform: np.ndarray) -> np.ndarray:
+    """
+    SE(3) logarithm returning [rho, phi].
+    """
+    transform = np.asarray(transform, dtype=np.float64)
+    R = transform[:3, :3]
+    t = transform[:3, 3]
+
+    phi = Rotation.from_matrix(R).as_rotvec()
+    theta = np.linalg.norm(phi)
+    Phi = skew(phi)
+    Phi2 = Phi @ Phi
+
+    if theta < 1e-10:
+        V = np.eye(3) + 0.5 * Phi + (1.0 / 6.0) * Phi2
+    else:
+        theta2 = theta * theta
+        theta3 = theta2 * theta
+        B = (1.0 - math.cos(theta)) / theta2
+        C = (theta - math.sin(theta)) / theta3
+        V = np.eye(3) + B * Phi + C * Phi2
+
+    rho = np.linalg.solve(V, t)
+    return np.concatenate([rho, phi])
+
+
+def transform_points_constant_twist(
+    points: np.ndarray,
+    xi_rate: np.ndarray,
+    dt: np.ndarray,
+) -> np.ndarray:
+    """
+    Apply Exp(dt_i * xi^) to each point using a vectorized constant-twist model.
+
+    points: (N,3)
+    xi_rate: [v_x,v_y,v_z,w_x,w_y,w_z] per second
+    dt: (N,) seconds, may be positive or negative
+    """
+    points = np.asarray(points, dtype=np.float64)
+    xi_rate = np.asarray(xi_rate, dtype=np.float64).reshape(6)
+    dt = np.asarray(dt, dtype=np.float64).reshape(-1)
+
+    velocity = xi_rate[:3]
+    omega = xi_rate[3:]
+    omega_norm = np.linalg.norm(omega)
+
+    W = skew(omega)
+    W2 = W @ W
+
+    WX = points @ W.T
+    W2X = points @ W2.T
+
+    if omega_norm < 1e-12:
+        # First-order limit around zero angular velocity.
+        return points + dt[:, None] * (WX + velocity[None, :])
+
+    angle = omega_norm * dt
+
+    a = np.sin(angle) / omega_norm
+    b = (1.0 - np.cos(angle)) / (omega_norm * omega_norm)
+
+    rotated = points + a[:, None] * WX + b[:, None] * W2X
+
+    Wv = W @ velocity
+    W2v = W2 @ velocity
+
+    c = b
+    d = (
+        angle - np.sin(angle)
+    ) / (omega_norm * omega_norm * omega_norm)
+
+    translation = (
+        dt[:, None] * velocity[None, :]
+        + c[:, None] * Wv[None, :]
+        + d[:, None] * W2v[None, :]
+    )
+
+    return rotated + translation
+
+
+# ---------------------------------------------------------------------
+# Projection and residuals
+# ---------------------------------------------------------------------
+
+def unproject(
+    xs: np.ndarray,
+    ys: np.ndarray,
+    depth: np.ndarray,
+    K: np.ndarray,
+) -> np.ndarray:
+    fx = K[0, 0]
+    fy = K[1, 1]
+    cx = K[0, 2]
+    cy = K[1, 2]
+
+    X = (xs - cx) * depth / fx
+    Y = (ys - cy) * depth / fy
+    Z = depth
+
+    return np.column_stack([X, Y, Z]).astype(np.float64)
+
+
+def project(points: np.ndarray, K: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    z = points[:, 2]
+
+    safe_z = np.where(np.abs(z) > 1e-12, z, np.nan)
+
+    u = K[0, 0] * points[:, 0] / safe_z + K[0, 2]
+    v = K[1, 1] * points[:, 1] / safe_z + K[1, 2]
+
+    return u, v
+
+
+def predict_smear(
+    xi_rate: np.ndarray,
+    points_center: np.ndarray,
+    dt_a: np.ndarray,
+    dt_b: np.ndarray,
+    K: np.ndarray,
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    points_a = transform_points_constant_twist(
+        points_center,
+        xi_rate,
+        dt_a,
+    )
+    points_b = transform_points_constant_twist(
+        points_center,
+        xi_rate,
+        dt_b,
+    )
+
+    u_a, v_a = project(points_a, K)
+    u_b, v_b = project(points_b, K)
+
+    pred_u = u_b - u_a
+    pred_v = v_b - v_a
+
+    valid_projection = (
+        np.isfinite(pred_u)
+        & np.isfinite(pred_v)
+        & (points_a[:, 2] > 1e-6)
+        & (points_b[:, 2] > 1e-6)
+    )
+
+    return pred_u, pred_v, valid_projection
+
+
+def make_residual_function(
+    points_center: np.ndarray,
+    dt_a: np.ndarray,
+    dt_b: np.ndarray,
+    observed_u: np.ndarray,
+    observed_v: np.ndarray,
+    K: np.ndarray,
+    invalid_penalty: float,
+):
+    def residual(xi_rate: np.ndarray) -> np.ndarray:
+        pred_u, pred_v, valid_projection = predict_smear(
+            xi_rate,
+            points_center,
+            dt_a,
+            dt_b,
+            K,
+        )
+
+        residual_u = pred_u - observed_u
+        residual_v = pred_v - observed_v
+
+        invalid = ~valid_projection
+        residual_u[invalid] = invalid_penalty
+        residual_v[invalid] = invalid_penalty
+
+        return np.column_stack(
+            [residual_u, residual_v]
+        ).reshape(-1)
+
+    return residual
+
+
+# ---------------------------------------------------------------------
+# Initialization
+# ---------------------------------------------------------------------
+
+def pnp_initial_twist(
+    points_center: np.ndarray,
+    xs: np.ndarray,
+    ys: np.ndarray,
+    observed_u: np.ndarray,
+    observed_v: np.ndarray,
+    K: np.ndarray,
+    exposure: float,
+    reprojection_threshold: float,
+) -> np.ndarray:
+    """
+    Initialize from a centre-to-exposure-end PnP approximation.
+
+    This initializer is not the final model. It only provides a useful starting
+    point for the rolling-shutter optimization.
+    """
+    target_points = np.column_stack(
+        [
+            xs + 0.5 * observed_u,
+            ys + 0.5 * observed_v,
+        ]
+    ).astype(np.float32)
+
+    object_points = points_center.astype(np.float32)
+
+    success, rvec, tvec, inliers = cv2.solvePnPRansac(
+        objectPoints=object_points,
+        imagePoints=target_points,
+        cameraMatrix=K,
+        distCoeffs=None,
+        iterationsCount=1000,
+        reprojectionError=reprojection_threshold,
+        confidence=0.999,
+        flags=cv2.SOLVEPNP_EPNP,
+    )
+
+    if not success or inliers is None or len(inliers) < 6:
+        return np.zeros(6, dtype=np.float64)
+
+    inlier_indices = inliers.reshape(-1)
+
+    if hasattr(cv2, "solvePnPRefineLM"):
+        rvec, tvec = cv2.solvePnPRefineLM(
+            object_points[inlier_indices],
+            target_points[inlier_indices],
+            K,
+            None,
+            rvec,
+            tvec,
+        )
+
+    R, _ = cv2.Rodrigues(rvec)
+
+    T_half = np.eye(4, dtype=np.float64)
+    T_half[:3, :3] = R
+    T_half[:3, 3] = tvec.reshape(3)
+
+    half_exposure = 0.5 * exposure
+    if half_exposure <= 0:
+        return np.zeros(6, dtype=np.float64)
+
+    return se3_log(T_half) / half_exposure
+
+
+# ---------------------------------------------------------------------
+# Mocap comparison
+# ---------------------------------------------------------------------
+
+def quat_to_rotation(q: np.ndarray, order: str) -> np.ndarray:
+    q = np.asarray(q, dtype=np.float64).reshape(4)
+
+    if order == "wxyz":
+        q = q[[1, 2, 3, 0]]
+
+    norm = np.linalg.norm(q)
+    if norm < 1e-12:
+        raise ValueError("Quaternion has nearly zero norm")
+
+    return Rotation.from_quat(q / norm).as_matrix()
+
+
+def make_transform(
+    position: np.ndarray,
+    quaternion: np.ndarray,
+    quat_order: str,
+) -> np.ndarray:
+    T = np.eye(4, dtype=np.float64)
+    T[:3, :3] = quat_to_rotation(quaternion, quat_order)
+    T[:3, 3] = np.asarray(position, dtype=np.float64).reshape(3)
+    return T
+
+
+def dense_world_pose_at_tau(
+    metadata: np.lib.npyio.NpzFile,
+    tau: float,
+    quat_order: str,
+) -> np.ndarray:
+    taus = np.asarray(metadata["taus"], dtype=np.float64).reshape(-1)
+    dense_p = np.asarray(metadata["dense_p"], dtype=np.float64)
+    dense_q = np.asarray(metadata["dense_q"], dtype=np.float64)
+
+    if dense_p.shape != (len(taus), 3):
+        raise ValueError(
+            f"dense_p must be ({len(taus)},3), got {dense_p.shape}"
+        )
+    if dense_q.shape != (len(taus), 4):
+        raise ValueError(
+            f"dense_q must be ({len(taus)},4), got {dense_q.shape}"
+        )
+
+    tau = float(np.clip(tau, taus.min(), taus.max()))
+
+    position = np.array(
+        [
+            np.interp(tau, taus, dense_p[:, axis])
+            for axis in range(3)
+        ],
+        dtype=np.float64,
+    )
+
+    quaternions = dense_q.copy()
+    if quat_order == "wxyz":
+        quaternions = quaternions[:, [1, 2, 3, 0]]
+
+    quaternions /= np.linalg.norm(
+        quaternions,
+        axis=1,
+        keepdims=True,
+    )
+
+    for index in range(1, len(quaternions)):
+        if np.dot(
+            quaternions[index - 1],
+            quaternions[index],
+        ) < 0:
+            quaternions[index] *= -1.0
+
+    rotation = Slerp(
+        taus,
+        Rotation.from_quat(quaternions),
+    )([tau]).as_matrix()[0]
+
+    T = np.eye(4, dtype=np.float64)
+    T[:3, :3] = rotation
+    T[:3, 3] = position
+    return T
+
+
+def world_pose_to_camera_pose(
+    T_world_pose: np.ndarray,
+    metadata: np.lib.npyio.NpzFile,
+    poses_are: str,
+    tcb_convention: str,
+) -> np.ndarray:
+    if poses_are == "camera":
+        return T_world_pose
+
+    T_cb = np.asarray(metadata["T_cb"], dtype=np.float64).squeeze()
+    if T_cb.shape != (4, 4):
+        raise ValueError(f"T_cb must be 4x4, got {T_cb.shape}")
+
+    # c_from_b: X_c = T_cb X_b, therefore T_bc = inv(T_cb).
+    T_bc = (
+        np.linalg.inv(T_cb)
+        if tcb_convention == "c_from_b"
+        else T_cb
+    )
+
+    return T_world_pose @ T_bc
+
+
+def gt_mid_exposure_transform(
+    metadata: np.lib.npyio.NpzFile,
+    quat_order: str,
+    poses_are: str,
+    tcb_convention: str,
+) -> Tuple[np.ndarray, float, float]:
+    readout = float(np.asarray(metadata["readout"]).squeeze())
+    exposure = float(np.asarray(metadata["exposure"]).squeeze())
+
+    delta = 0.5 * exposure / readout
+    tau_a = 0.5 - delta
+    tau_b = 0.5 + delta
+
+    T_world_pose_a = dense_world_pose_at_tau(
+        metadata,
+        tau_a,
+        quat_order,
+    )
+    T_world_pose_b = dense_world_pose_at_tau(
+        metadata,
+        tau_b,
+        quat_order,
+    )
+
+    T_world_camera_a = world_pose_to_camera_pose(
+        T_world_pose_a,
+        metadata,
+        poses_are,
+        tcb_convention,
+    )
+    T_world_camera_b = world_pose_to_camera_pose(
+        T_world_pose_b,
+        metadata,
+        poses_are,
+        tcb_convention,
+    )
+
+    # Maps camera coordinates at exposure start to camera coordinates at end.
+    T_b_a = (
+        np.linalg.inv(T_world_camera_b)
+        @ T_world_camera_a
+    )
+
+    return T_b_a, tau_a, tau_b
+
+
+def rotation_error_deg(
+    R_estimated: np.ndarray,
+    R_ground_truth: np.ndarray,
+) -> float:
+    delta = R_estimated @ R_ground_truth.T
+    cosine = np.clip(
+        (np.trace(delta) - 1.0) / 2.0,
+        -1.0,
+        1.0,
+    )
+    return math.degrees(math.acos(float(cosine)))
+
+
+def vector_angle_deg(a: np.ndarray, b: np.ndarray) -> float:
+    norm_a = np.linalg.norm(a)
+    norm_b = np.linalg.norm(b)
+
+    if norm_a < 1e-12 or norm_b < 1e-12:
+        return float("nan")
+
+    cosine = np.clip(
+        np.dot(a, b) / (norm_a * norm_b),
+        -1.0,
+        1.0,
+    )
+    return math.degrees(math.acos(float(cosine)))
+
+
+def compare_pose(
+    T_estimated: np.ndarray,
+    T_ground_truth: np.ndarray,
+) -> Dict[str, float]:
+    t_estimated = T_estimated[:3, 3]
+    t_ground_truth = T_ground_truth[:3, 3]
+
+    estimated_norm = np.linalg.norm(t_estimated)
+    gt_norm = np.linalg.norm(t_ground_truth)
+
+    return {
+        "rotation_error_deg": rotation_error_deg(
+            T_estimated[:3, :3],
+            T_ground_truth[:3, :3],
+        ),
+        "translation_error": float(
+            np.linalg.norm(t_estimated - t_ground_truth)
+        ),
+        "translation_direction_error_deg": vector_angle_deg(
+            t_estimated,
+            t_ground_truth,
+        ),
+        "estimated_translation_norm": float(estimated_norm),
+        "gt_translation_norm": float(gt_norm),
+        "translation_scale_ratio": (
+            float(estimated_norm / gt_norm)
+            if gt_norm > 1e-12
+            else float("nan")
+        ),
+    }
+
+
+# ---------------------------------------------------------------------
+# Evaluation and output
+# ---------------------------------------------------------------------
+
+def smear_metrics(
+    predicted_u: np.ndarray,
+    predicted_v: np.ndarray,
+    observed_u: np.ndarray,
+    observed_v: np.ndarray,
+    valid_projection: np.ndarray,
+) -> Dict[str, float]:
+    epe = np.sqrt(
+        (predicted_u - observed_u) ** 2
+        + (predicted_v - observed_v) ** 2
+    )
+    epe = epe[valid_projection]
+
+    if epe.size == 0:
+        return {
+            "mean_epe": float("nan"),
+            "median_epe": float("nan"),
+            "p90_epe": float("nan"),
+            "fraction_below_1px": 0.0,
+            "fraction_below_3px": 0.0,
+        }
+
+    return {
+        "mean_epe": float(np.mean(epe)),
+        "median_epe": float(np.median(epe)),
+        "p90_epe": float(np.percentile(epe, 90)),
+        "fraction_below_1px": float(np.mean(epe < 1.0)),
+        "fraction_below_3px": float(np.mean(epe < 3.0)),
+    }
+
+
+def print_transform(name: str, transform: np.ndarray) -> None:
+    print(f"\n{name}:")
+    print(
+        np.array2string(
+            transform,
+            precision=8,
+            suppress_small=True,
+        )
+    )
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description=(
+            "Estimate a constant rolling-shutter camera twist from a MAT or PFM "
+            "smear field and compare it with the NPZ mocap trajectory."
+        )
+    )
+
+    parser.add_argument("--smear", required=True)
+    parser.add_argument(
+        "--input-type",
+        choices=["auto", "mat", "pfm"],
+        default="auto",
+    )
+    parser.add_argument("--metadata", required=True)
+    parser.add_argument(
+        "--output",
+        default="rolling_shutter_pose_result.npz",
+    )
+
+    parser.add_argument(
+        "--quat-order",
+        choices=["xyzw", "wxyz"],
+        default="xyzw",
+    )
+    parser.add_argument(
+        "--poses-are",
+        choices=["camera", "body"],
+        default="body",
+    )
+    parser.add_argument(
+        "--tcb-convention",
+        choices=["c_from_b", "b_from_c"],
+        default="c_from_b",
+    )
+
+    parser.add_argument("--depth-scale", type=float, default=1.0)
+    parser.add_argument("--min-depth", type=float, default=0.3)
+    parser.add_argument("--max-depth", type=float, default=15.0)
+    parser.add_argument("--min-smear", type=float, default=2.0)
+    parser.add_argument("--max-smear", type=float, default=50.0)
+    parser.add_argument("--sigma-threshold", type=float, default=None)
+
+    parser.add_argument(
+        "--max-points",
+        type=int,
+        default=6000,
+        help="Maximum number of valid pixels used in optimization",
+    )
+    parser.add_argument("--seed", type=int, default=0)
+
+    parser.add_argument(
+        "--initialization",
+        choices=["pnp", "zero"],
+        default="pnp",
+    )
+    parser.add_argument(
+        "--sign-selection",
+        choices=["residual", "gt_rotation"],
+        default="residual",
+        help=(
+            "'residual' does not use mocap. 'gt_rotation' is diagnostic only "
+            "and chooses the candidate with the smallest mocap rotation error."
+        ),
+    )
+
+    parser.add_argument(
+        "--loss",
+        choices=["linear", "soft_l1", "huber", "cauchy", "arctan"],
+        default="soft_l1",
+    )
+    parser.add_argument("--f-scale", type=float, default=1.0)
+    parser.add_argument("--max-nfev", type=int, default=120)
+    parser.add_argument("--invalid-penalty", type=float, default=50.0)
+    parser.add_argument("--pnp-reprojection-threshold", type=float, default=3.0)
+
+    parser.add_argument(
+        "--max-linear-speed",
+        type=float,
+        default=10.0,
+        help="Absolute bound for each translational twist component in m/s",
+    )
+    parser.add_argument(
+        "--max-angular-speed",
+        type=float,
+        default=20.0,
+        help="Absolute bound for each angular twist component in rad/s",
+    )
+
+    args = parser.parse_args()
+
+    smear, input_type = load_smear(args.smear, args.input_type)
+    u, v, third = double_angle_to_local(smear)
+
+    metadata = np.load(args.metadata, allow_pickle=False)
+
+    required_metadata = [
+        "depth",
+        "K_color",
+        "readout",
+        "exposure",
+        "taus",
+        "dense_p",
+        "dense_q",
+        "T_cb",
+    ]
+    missing = [
+        key for key in required_metadata
+        if key not in metadata
+    ]
+    if missing:
+        raise KeyError(f"NPZ is missing required fields: {missing}")
+
+    depth = (
+        np.asarray(metadata["depth"], dtype=np.float64).squeeze()
+        * args.depth_scale
+    )
+    K = np.asarray(
+        metadata["K_color"],
+        dtype=np.float64,
+    ).squeeze()
+
+    if depth.ndim != 2:
+        raise ValueError(f"depth must be HxW, got {depth.shape}")
+    if K.shape != (3, 3):
+        raise ValueError(f"K_color must be 3x3, got {K.shape}")
+    if depth.shape != smear.shape[:2]:
+        raise ValueError(
+            f"Shape mismatch: depth={depth.shape}, smear={smear.shape[:2]}"
+        )
+
+    H, W = depth.shape
+
+    smear_length = np.sqrt(u * u + v * v)
+
+    valid = (
+        np.isfinite(depth)
+        & np.isfinite(u)
+        & np.isfinite(v)
+        & (depth >= args.min_depth)
+        & (depth <= args.max_depth)
+        & (smear_length >= args.min_smear)
+        & (smear_length <= args.max_smear)
+    )
+
+    if input_type == "pfm":
+        valid &= third > 0.5
+        sigma = None
+    else:
+        sigma = raw_s_to_sigma(third)
+        if args.sigma_threshold is not None:
+            valid &= (
+                np.isfinite(sigma)
+                & (sigma <= args.sigma_threshold)
+            )
+
+    ys, xs = np.where(valid)
+
+    if len(xs) < 20:
+        raise RuntimeError(
+            f"Only {len(xs)} valid pixels remain; at least 20 are required"
+        )
+
+    rng = np.random.default_rng(args.seed)
+
+    if args.max_points > 0 and len(xs) > args.max_points:
+        selected_indices = rng.choice(
+            len(xs),
+            size=args.max_points,
+            replace=False,
+        )
+        xs = xs[selected_indices]
+        ys = ys[selected_indices]
+
+    xs = xs.astype(np.float64)
+    ys = ys.astype(np.float64)
+
+    sampled_depth = depth[
+        ys.astype(np.int64),
+        xs.astype(np.int64),
+    ]
+    sampled_u = u[
+        ys.astype(np.int64),
+        xs.astype(np.int64),
+    ]
+    sampled_v = v[
+        ys.astype(np.int64),
+        xs.astype(np.int64),
+    ]
+
+    points_center = unproject(
+        xs,
+        ys,
+        sampled_depth,
+        K,
+    )
+
+    readout = float(
+        np.asarray(metadata["readout"]).squeeze()
+    )
+    exposure = float(
+        np.asarray(metadata["exposure"]).squeeze()
+    )
+
+    if readout <= 0 or exposure <= 0:
+        raise ValueError(
+            f"readout and exposure must be positive, got {readout}, {exposure}"
+        )
+
+    tau_center = ys / float(H - 1)
+    half_exposure_tau = 0.5 * exposure / readout
+
+    # Match the clipping used by the PFM generator.
+    tau_a = np.clip(
+        tau_center - half_exposure_tau,
+        0.0,
+        1.0,
+    )
+    tau_b = np.clip(
+        tau_center + half_exposure_tau,
+        0.0,
+        1.0,
+    )
+
+    dt_a = (tau_a - tau_center) * readout
+    dt_b = (tau_b - tau_center) * readout
+
+    print("Smear:", args.smear)
+    print("Input type:", input_type)
+    print("Metadata:", args.metadata)
+    print("Image/depth shape:", depth.shape)
+    print("Valid optimization points:", len(xs))
+    print("Readout:", readout, "s")
+    print("Exposure:", exposure, "s")
+    print("Half exposure in normalized readout time:", half_exposure_tau)
+    print(
+        "Rows with clipped start:",
+        float(np.mean(tau_center - half_exposure_tau < 0.0)) * 100.0,
+        "%",
+    )
+    print(
+        "Rows with clipped end:",
+        float(np.mean(tau_center + half_exposure_tau > 1.0)) * 100.0,
+        "%",
+    )
+
+    T_gt, gt_tau_a, gt_tau_b = gt_mid_exposure_transform(
+        metadata,
+        args.quat_order,
+        args.poses_are,
+        args.tcb_convention,
+    )
+
+    candidates = []
+
+    for sign in (1.0, -1.0):
+        observed_u = sign * sampled_u
+        observed_v = sign * sampled_v
+
+        if args.initialization == "pnp":
+            initial_xi = pnp_initial_twist(
+                points_center,
+                xs,
+                ys,
+                observed_u,
+                observed_v,
+                K,
+                exposure,
+                args.pnp_reprojection_threshold,
+            )
+        else:
+            initial_xi = np.zeros(6, dtype=np.float64)
+
+        residual_function = make_residual_function(
+            points_center,
+            dt_a,
+            dt_b,
+            observed_u,
+            observed_v,
+            K,
+            args.invalid_penalty,
+        )
+
+        lower_bound = np.array(
+            [
+                -args.max_linear_speed,
+                -args.max_linear_speed,
+                -args.max_linear_speed,
+                -args.max_angular_speed,
+                -args.max_angular_speed,
+                -args.max_angular_speed,
+            ],
+            dtype=np.float64,
+        )
+
+        upper_bound = -lower_bound
+
+        initial_xi = np.clip(
+            initial_xi,
+            lower_bound + 1e-9,
+            upper_bound - 1e-9,
+        )
+
+        print("\n========================================")
+        print(f"Optimizing sign {sign:+.0f}")
+        print("========================================")
+        print("Initial twist [v,w] per second:", initial_xi)
+
+        optimization = least_squares(
+            residual_function,
+            initial_xi,
+            bounds=(lower_bound, upper_bound),
+            loss=args.loss,
+            f_scale=args.f_scale,
+            max_nfev=args.max_nfev,
+            verbose=1,
+        )
+
+        xi_rate = optimization.x
+
+        predicted_u, predicted_v, valid_projection = predict_smear(
+            xi_rate,
+            points_center,
+            dt_a,
+            dt_b,
+            K,
+        )
+
+        smear_result = smear_metrics(
+            predicted_u,
+            predicted_v,
+            observed_u,
+            observed_v,
+            valid_projection,
+        )
+
+        T_est_mid_exposure = se3_exp(
+            xi_rate * exposure
+        )
+
+        direct_errors = compare_pose(
+            T_est_mid_exposure,
+            T_gt,
+        )
+        inverse_errors = compare_pose(
+            np.linalg.inv(T_est_mid_exposure),
+            T_gt,
+        )
+
+        print("Optimization success:", optimization.success)
+        print("Status:", optimization.status)
+        print("Message:", optimization.message)
+        print("Function evaluations:", optimization.nfev)
+        print("Estimated twist [v,w] per second:", xi_rate)
+        print("Cost:", float(optimization.cost))
+        print("Optimality:", float(optimization.optimality))
+        print("Smear metrics:", smear_result)
+
+        print_transform(
+            "Estimated middle-row full-exposure transform",
+            T_est_mid_exposure,
+        )
+
+        print("\nDirect mocap comparison:")
+        for key, value in direct_errors.items():
+            print(f"  {key}: {value}")
+
+        print("Inverse mocap comparison:")
+        for key, value in inverse_errors.items():
+            print(f"  {key}: {value}")
+
+        candidates.append(
+            {
+                "sign": sign,
+                "xi_rate": xi_rate,
+                "optimization": optimization,
+                "smear_metrics": smear_result,
+                "T_est": T_est_mid_exposure,
+                "direct_errors": direct_errors,
+                "inverse_errors": inverse_errors,
+            }
+        )
+
+    if args.sign_selection == "residual":
+        selected = min(
+            candidates,
+            key=lambda item: item["smear_metrics"]["mean_epe"],
+        )
+        selected_inverse = selected["sign"] < 0
+
+    else:
+        diagnostic_options = []
+        for candidate in candidates:
+            diagnostic_options.append(
+                (
+                    candidate["direct_errors"]["rotation_error_deg"],
+                    candidate,
+                    False,
+                )
+            )
+            diagnostic_options.append(
+                (
+                    candidate["inverse_errors"]["rotation_error_deg"],
+                    candidate,
+                    True,
+                )
+            )
+
+        _, selected, selected_inverse = min(
+            diagnostic_options,
+            key=lambda item: item[0],
+        )
+
+        print(
+            "\nWARNING: --sign-selection gt_rotation uses mocap ground truth "
+            "and is only valid for diagnosis/evaluation."
+        )
+
+    T_selected = (
+        np.linalg.inv(selected["T_est"])
+        if selected_inverse
+        else selected["T_est"]
+    )
+
+    selected_errors = compare_pose(
+        T_selected,
+        T_gt,
+    )
+
+    print("\n========================================")
+    print("Selected result")
+    print("========================================")
+    print("Selection rule:", args.sign_selection)
+    print("Selected sign:", selected["sign"])
+    print("Selected inverse:", selected_inverse)
+    print("Selected twist [v,w] per second:", selected["xi_rate"])
+    print("Selected smear metrics:", selected["smear_metrics"])
+    print("GT middle-exposure taus:", gt_tau_a, gt_tau_b)
+
+    print_transform("Selected estimated transform", T_selected)
+    print_transform("Mocap middle-exposure transform", T_gt)
+
+    print("\nSelected mocap errors:")
+    for key, value in selected_errors.items():
+        print(f"  {key}: {value}")
+
+    output_directory = os.path.dirname(args.output)
+    if output_directory:
+        os.makedirs(output_directory, exist_ok=True)
+
+    np.savez(
+        args.output,
+        xi_rate=selected["xi_rate"],
+        selected_sign=np.array(selected["sign"]),
+        selected_inverse=np.array(selected_inverse),
+        T_est_mid_exposure=T_selected,
+        T_gt_mid_exposure=T_gt,
+        gt_tau_a=np.array(gt_tau_a),
+        gt_tau_b=np.array(gt_tau_b),
+        mean_smear_epe=np.array(
+            selected["smear_metrics"]["mean_epe"]
+        ),
+        median_smear_epe=np.array(
+            selected["smear_metrics"]["median_epe"]
+        ),
+        p90_smear_epe=np.array(
+            selected["smear_metrics"]["p90_epe"]
+        ),
+        rotation_error_deg=np.array(
+            selected_errors["rotation_error_deg"]
+        ),
+        translation_error=np.array(
+            selected_errors["translation_error"]
+        ),
+        translation_direction_error_deg=np.array(
+            selected_errors["translation_direction_error_deg"]
+        ),
+        estimated_translation_norm=np.array(
+            selected_errors["estimated_translation_norm"]
+        ),
+        gt_translation_norm=np.array(
+            selected_errors["gt_translation_norm"]
+        ),
+        translation_scale_ratio=np.array(
+            selected_errors["translation_scale_ratio"]
+        ),
+    )
+
+    json_path = os.path.splitext(args.output)[0] + ".json"
+
+    json_payload = {
+        "smear": os.path.abspath(args.smear),
+        "input_type": input_type,
+        "metadata": os.path.abspath(args.metadata),
+        "selection_rule": args.sign_selection,
+        "selected_sign": selected["sign"],
+        "selected_inverse": selected_inverse,
+        "xi_rate": selected["xi_rate"].tolist(),
+        "smear_metrics": selected["smear_metrics"],
+        "mocap_errors": selected_errors,
+        "readout": readout,
+        "exposure": exposure,
+        "gt_tau_a": gt_tau_a,
+        "gt_tau_b": gt_tau_b,
+        "optimization_points": len(xs),
+        "all_candidates": [
+            {
+                "sign": candidate["sign"],
+                "xi_rate": candidate["xi_rate"].tolist(),
+                "smear_metrics": candidate["smear_metrics"],
+                "direct_errors": candidate["direct_errors"],
+                "inverse_errors": candidate["inverse_errors"],
+                "cost": float(candidate["optimization"].cost),
+                "success": bool(candidate["optimization"].success),
+                "message": candidate["optimization"].message,
+                "nfev": int(candidate["optimization"].nfev),
+            }
+            for candidate in candidates
+        ],
+    }
+
+    with open(json_path, "w", encoding="utf-8") as file:
+        json.dump(json_payload, file, indent=2)
+
+    print("\nSaved:")
+    print(args.output)
+    print(json_path)
+
+
+if __name__ == "__main__":
+    main()
